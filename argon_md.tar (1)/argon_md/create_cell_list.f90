@@ -6,7 +6,7 @@ subroutine new_nlist(TotAtom, r, Box, Rn, NCell, ll, hoc)
         integer, intent(in):: TotAtom, Ncell
         real(kind=dp),intent(inout) :: r(TotAtom,3)
         real(kind=dp) :: Box
-        real, intent(inout) :: Rn
+        real(kind=dp),intent(inout) :: Rn
         integer :: ll(TotAtom), hoc(0:Ncell-1, 0:Ncell-1, 0:NCell-1)
         integer :: atom, icel(3), i, j, k
         
@@ -18,10 +18,14 @@ subroutine new_nlist(TotAtom, r, Box, Rn, NCell, ll, hoc)
                 	enddo
                 enddo
         enddo
+        
         do atom=1, TotAtom
-        	icel = r(atom,:)/rn
+        	icel = int(r(atom,:)/Rn)
         	ll(atom) = hoc(icel(1), icel(2), icel(3))
         	hoc(icel(1), icel(2), icel(3)) = atom
+        	write(*,*) "Atom : ", atom
+        	write(*,*) icel
         enddo
+
         return
 end subroutine new_nlist

@@ -9,7 +9,7 @@ subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,Rn,NCell,
  real(kind=8),intent(in):: Mass
  real(kind=dp),intent(inout) :: r(TotAtom,3)
  real(kind=dp),intent(out) :: v(TotAtom,3)
- real, intent(inout) :: Rn
+ real(kind=dp),intent(inout) :: Rn
  
  integer, intent(inout) :: ll(TotAtom), hoc(0:Ncell-1, 0:Ncell-1, 0:NCell-1)	! Arun 3) The linked list passed from main and and to be sent to force subroutine
  integer :: icel
@@ -44,6 +44,7 @@ subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,Rn,NCell,
      endif 
    enddo 
  enddo
+ 
  
  call new_nlist(TotAtom, r,Box, Rn, NCell, ll, hoc)	! Arun 4) Create linked list and header array using subroutine
 !assign velocties 

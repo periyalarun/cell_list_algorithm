@@ -108,10 +108,16 @@ Temp=Temp/TempConv
  Rn = Box/NCell
  allocate(hoc(0:Ncell-1, 0:Ncell-1, 0:NCell-1))	! Arun 4) Ncell value assigned and RCut value calibrated according to Ncell
  
+ write(*,*) "NCell: ", NCell, "RCut: ", RCut, "Rn: ", Rn, "Box: ", Box
+ write(*,*) "allocation success"
+ 
  call initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,Rn,NCell,ll,hoc)     ! get initial coordinates and velocities
  ! Arun 3) passing ll and hoc to initialise for defining them based on the coordinates 
+ 
+ write(*,*) "initialization success"
+ write(*,*) "Main NCell: ", NCell
 
- call force_calc(TotAtom,Box,RCut,r,Sig,Eps,Force,PE,Rn,Ncell,ll,hoc)	! Arun 5) Added Ncell, ll and hoc as parameter
+ call force_calc(TotAtom,Box,RCut,r,Sig,Eps,Force,PE,Rn,NCell,ll,hoc)	! Arun 5) Added NCell, ll and hoc as parameter
 
  write(5000,"(a20,F18.5)") "Initial potential energy = ",PE*EnerConv  
 
