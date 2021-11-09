@@ -1,16 +1,18 @@
-subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,NCell,ll,hoc)
+subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,RCut,NCell,ll,hoc)	! Arun 1) New parameters added and to be ensured that it is added in the caller and declaration
  use general, only: dp
  use conversions 
 ! use ifport
  implicit none  
  integer :: CheckAtom
  character(len=300),intent(in) :: CoorFileName
- integer,intent(in):: TotAtom
+ integer,intent(in):: TotAtom, NCell	! Arun 2) No of cells passed from main
  real(kind=8),intent(in):: Mass
  real(kind=dp),intent(inout) :: r(TotAtom,3)
  real(kind=dp),intent(out) :: v(TotAtom,3)
-
-
+ real, intent(in) :: RCut
+ integer, intent(inout) :: ll(TotAtom), hoc(NCell,Ncell,NCell)	! Arun 3) The linked list passed from main and and to be sent to force subroutine
+ integer :: icel
+ 
  character(len=5),intent(out) :: AtomLabel(TotAtom)
  integer :: i,j
 
@@ -36,13 +38,13 @@ subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,NCell,ll,
    do j=1,3
      if(r(i,j) > Box) then
        r(i,j)=r(i,j)-Box
-       icel = r(i,j)/NCell
-      elseif(r(i,j)<0.d0) then
+     elseif(r(i,j)<0.d0) then
        r(i,j)=r(i,j)+Box
      endif 
    enddo 
  enddo
-
+ 
+ call new_nlist(TotAtom, Box, NCell, ll, hoc)	! Arun 4) Create linked list and header array using subroutine
 !assign velocties 
 
  sumv=0.d0

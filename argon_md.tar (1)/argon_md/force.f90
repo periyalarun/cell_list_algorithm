@@ -1,12 +1,13 @@
-subroutine force_calc(TotAtom,Box,Rcut,r,Sig,Eps,Force,PE)
+subroutine force_calc(TotAtom,Box,Rcut,r,Sig,Eps,Force,PE,NCell,ll,hoc)	! Arun 1) New parameters added and to be checked in other callers and declarations
  use general, only: dp,atom1,atom2
  implicit none 
- integer,intent(in) :: TotAtom
+ integer,intent(in) :: TotAtom, NCell	!Arun 2) Ncell variable declared
  real(kind=dp),intent(in) :: r(TotAtom,3)
  real(kind=dp) :: fac2,fac6,r2,df,fc(3),dr(3),Ecut,R2cut
  real(kind=dp),intent(out) :: Force(TotAtom,3),PE
 
  real(kind=dp) :: Box,Rcut,Eps,Sig
+ integer :: ll(TotAtoms), hoc(NCell, Ncell) ! Arun 3) ll and hoc declared
 
  R2cut=Rcut*Rcut 
 
@@ -16,8 +17,10 @@ subroutine force_calc(TotAtom,Box,Rcut,r,Sig,Eps,Force,PE)
  Ecut=4.d0*Eps*fac6*(fac6-1)
 
  ! calculting force and energy 
-
-
+ do atom1=1,TotAtom-1	! Arun 4) New algorithm for cell list
+	call atom_energy(atom1,r(atom1,:),Force,PE)
+ enddo
+ 
  PE=0.d0
  Force=0.d0
  do atom1=1,TotAtom-1
