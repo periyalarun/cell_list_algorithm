@@ -2,7 +2,7 @@ FC = gfortran
 FFLAGS = -O3 
 TARGET = mdrun 
 
-OBJECTS = main.o init.o force.o integrate.o temp.o create_cell_list.o
+OBJECTS = main.o init.o force.o integrate.o temp.o atom_force.o create_cell_list.o 
 
 $(TARGET) : $(OBJECTS) 
 	$(FC) $(FFLAGS) -o $@ $^  
