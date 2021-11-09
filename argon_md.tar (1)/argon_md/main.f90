@@ -1,6 +1,6 @@
 module general
  integer, parameter :: dp=kind(0.d0) 
- integer :: Nmol,NAtom,NoMDStep,TotAtom,atom1,atom2
+ integer :: Nmol,NAtom,NoMDStep,TotAtom,atom1,atom2,NCell
  real(kind=dp) :: TimeStep,Box,Sig,Eps,Rcut,Temp,Mass,EQMDStep
 end module 
 
@@ -24,7 +24,7 @@ program mainprogram
  real(kind=dp),allocatable :: Force(:,:)
  character(len=5),allocatable :: AtomLabel(:)
  real(kind=dp) :: PE,KE
-
+ integer, allocatable :: ll(:), hoc(:,:)        !Arun 1) linked list with length of number of particles and header of cell containing the particle with largest index 
  real(kind=dp) :: t,t1,t0
  character(len=300) :: CoorFileName
 
@@ -65,7 +65,7 @@ program mainprogram
  write(*,*) CoorFileName
  write(*,*) Box 
  write(*,*) Sig
- write(*,*) Eps          
+ write(*,*) Eps    
  write(*,*) Rcut
  write(*,*) Mass 
 
@@ -102,12 +102,16 @@ Temp=Temp/TempConv
  allocate(r(TotAtom,3),rm(TotAtom,3),v(TotAtom,3)) 
  allocate(Force(TotAtom,3))
  allocate(AtomLabel(TotAtom))
- allocate(ll(TotalAtom))
+ allocate(ll(TotalAtom))        !Arun 2) allocate memory to linked list with memory of total number of particles
 
+ NCell=int(Box/Rcut)
+ RCut = Box/NCell
+ allocate(hoc(NCell,NCell))
  
- call initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel)     ! get initial coordinates and velocities 
+ call initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,NCell,ll,hoc)     ! get initial coordinates and velocities
+ ! Arun 3) passing ll and hoc to initialise for defining them based on the coordinates 
 
- call force_calc(TotAtom,Box,Rcut,r,Sig,Eps,Force,PE) 
+ call force_calc(TotAtom,Box,Rcut,r,Sig,Eps,Force,PE,ll,hoc) 
 
  write(5000,"(a20,F18.5)") "Initial potential energy = ",PE*EnerConv  
 

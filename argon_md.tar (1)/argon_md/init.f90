@@ -1,4 +1,4 @@
-subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel)
+subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,NCell,ll,hoc)
  use general, only: dp
  use conversions 
 ! use ifport
@@ -9,6 +9,7 @@ subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel)
  real(kind=8),intent(in):: Mass
  real(kind=dp),intent(inout) :: r(TotAtom,3)
  real(kind=dp),intent(out) :: v(TotAtom,3)
+
 
  character(len=5),intent(out) :: AtomLabel(TotAtom)
  integer :: i,j
@@ -35,12 +36,12 @@ subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel)
    do j=1,3
      if(r(i,j) > Box) then
        r(i,j)=r(i,j)-Box
+       icel = r(i,j)/NCell
       elseif(r(i,j)<0.d0) then
        r(i,j)=r(i,j)+Box
      endif 
    enddo 
  enddo
-
 
 !assign velocties 
 
