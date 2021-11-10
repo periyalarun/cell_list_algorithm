@@ -117,18 +117,19 @@ Temp=Temp/TempConv
  write(*,*) "initialization success"
  write(*,*) "Main NCell: ", NCell
 
- call force_calc(TotAtom,Box,RCut,r,Sig,Eps,Force,PE,Rn,NCell,ll,hoc)	! Arun 5) Added NCell, ll and hoc as parameter
+ 
 
  write(5000,"(a20,F18.5)") "Initial potential energy = ",PE*EnerConv  
+ write(*,*) "Initial potential energy = ",PE*EnerConv 
 
  write(5000,*) "       Step              PE              KE                TE " 
 
  call cpu_time(t0) 
  t=0.d0 ; md_step=0 
- do while (md_step < NoMDStep)
+ do while (md_step < 2)
 
- !  call force_calc(TotAtom,Box,Rcut,r,Sig,Eps,Force,PE)                    ! calculates force
-
+   !call force_calc(TotAtom,Box,RCut,r,Sig,Eps,Force,PE,Rn,NCell,ll,hoc)	! Arun 5) Added NCell, ll and hoc as parameter
+   
    call integrate(t,EQMDStep,TotAtom,Mass,Box,Temp,Rcut,Sig,Eps,AtomLabel,TimeStep,r,v,Force,KE,PE)
    
   md_step=md_step+1 

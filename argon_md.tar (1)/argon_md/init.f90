@@ -46,7 +46,7 @@ subroutine initialize(TotAtom,CoorFileName,Temp,Mass,Box,r,v,AtomLabel,Rn,NCell,
  enddo
  
  
- call new_nlist(TotAtom, r,Box, Rn, NCell, ll, hoc)	! Arun 4) Create linked list and header array using subroutine
+ 
 !assign velocties 
 
  sumv=0.d0

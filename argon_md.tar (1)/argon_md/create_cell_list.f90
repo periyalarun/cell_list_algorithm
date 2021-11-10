@@ -23,8 +23,6 @@ subroutine new_nlist(TotAtom, r, Box, Rn, NCell, ll, hoc)
         	icel = int(r(atom,:)/Rn)
         	ll(atom) = hoc(icel(1), icel(2), icel(3))
         	hoc(icel(1), icel(2), icel(3)) = atom
-        	write(*,*) "Atom : ", atom
-        	write(*,*) icel
         enddo
 
         return
